@@ -622,11 +622,13 @@ app.get("/api/orders", authenticateToken, async (req, res) => {
  });
 
 // شروع سرور
-app.listen(PORT, async () => {
+const SERVER_PORT = process.env.PORT || PORT || 5000;
+
+app.listen(SERVER_PORT, "0.0.0.0", async () => {
     try {
         await pool.query("SELECT 1");
         console.log("MySQL Connected!");
-        console.log(`Server running on http://localhost:${PORT}`);
+        console.log(`Server running on port ${SERVER_PORT}`);
     } catch (error) {
         console.error("MySQL connection error:", error.message);
     }
