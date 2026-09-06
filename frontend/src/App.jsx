@@ -24,19 +24,55 @@ function App() {
 
   // دریافت کتاب‌ها
   useEffect(() => {
-    fetch("http://localhost:5000/api/books")
-      .then((res) => res.json())
-      .then((data) => setBooks(data))
-      .catch((error) => console.error(error));
-
-    // بررسی کاربر ذخیره شده
+    const demoBooks = [
+      {
+        id: 1,
+        title: "کتاب نمونه اول",
+        author: "نویسنده اول",
+        price: 120000,
+        stock: 10,
+        image: "",
+        description: "این یک کتاب نمونه برای نمایش فروشگاه است."
+      },
+      {
+        id: 2,
+        title: "کتاب نمونه دوم",
+        author: "نویسنده دوم",
+        price: 180000,
+        stock: 7,
+        image: "",
+        description: "این یک کتاب نمونه برای نمایش فروشگاه است."
+      },
+      {
+        id: 3,
+        title: "کتاب نمونه سوم",
+        author: "نویسنده سوم",
+        price: 250000,
+        stock: 5,
+        image: "",
+        description: "این یک کتاب نمونه برای نمایش فروشگاه است."
+      },
+      {
+        id: 4,
+        title: "کتاب نمونه چهارم",
+        author: "نویسنده چهارم",
+        price: 95000,
+        stock: 12,
+        image: "",
+        description: "این یک کتاب نمونه برای نمایش فروشگاه است."
+      }
+    ];
+  
+    setBooks(demoBooks);
+  
     const savedUser = localStorage.getItem("user");
-
+  
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
   }, []);
 
+    
   // ورود
   const login = async () => {
     if (!email || !password) {
