@@ -11,26 +11,45 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+
+      - name: Check project files
+        run: |
+          echo "Repository:"
+          ls -la
+          echo "Frontend:"
+          ls -la frontend
+          echo "Package.json:"
+          cat frontend/package.json
 
       - name: Install dependencies
-        run: |
-          cd frontend
-          npm install
+        working-directory: frontend
+        run: npm install
 
-      - name: Build React
+      - name: Build React application
+        working-directory: frontend
+        run: npm run build
+
+      - name: Check build output
         run: |
-          cd frontend
-          npm run build
+          echo "Checking dist folder..."
+          ls -la frontend/dist
+          echo "Build completed successfully."
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
@@ -47,7 +66,9 @@ jobs:
 
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
